@@ -171,3 +171,89 @@ The request body should be in JSON format and include the following fields:
 - Ensure that all required fields are provided and meet validation criteria.
 - The response includes a JWT token for authentication purposes.
 - Set the `Content-Type` header to `application/json` when making requests.
+
+## GET /users/profile
+
+### Description
+
+Retrieve the authenticated user's profile information.
+
+### Headers
+
+- **Authorization** (string, required): Bearer token obtained after login.
+
+### Responses
+
+#### Success
+
+- **Status Code**: 200 OK
+- **Body**:
+
+  ```json
+  {
+    "_id": "user_id_here",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+    // ...other user fields...
+  }
+  ```
+
+#### Errors
+
+- **401 Unauthorized**: Token is missing or invalid.
+
+  ```json
+  {
+    "message": "Authentication failed"
+  }
+  ```
+
+- **500 Internal Server Error**: An error occurred on the server.
+
+### Notes
+
+- Authentication is required for this endpoint.
+- Include the JWT token in the `Authorization` header as `Bearer <token>`.
+
+## GET /users/logout
+
+### Description
+
+Logout the authenticated user by invalidating their JWT token.
+
+### Headers
+
+- **Authorization** (string, required): Bearer token obtained after login.
+
+### Responses
+
+#### Success
+
+- **Status Code**: 200 OK
+- **Body**:
+
+  ```json
+  {
+    "message": "Logged out successfully"
+  }
+  ```
+
+#### Errors
+
+- **401 Unauthorized**: Token is missing or invalid.
+
+  ```json
+  {
+    "message": "Authentication failed"
+  }
+  ```
+
+- **500 Internal Server Error**: An error occurred on the server.
+
+### Notes
+
+- This endpoint invalidates the user's current JWT token.
+- Include the JWT token in the `Authorization` header as `Bearer <token>`.
