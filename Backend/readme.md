@@ -387,3 +387,182 @@ The request body should be in JSON format and include the following fields:
 - Ensure that all required fields are provided and meet validation criteria.
 - The response includes a JWT token for authentication purposes.
 - Set the `Content-Type` header to `application/json` when making requests.
+
+## POST /drivers/login
+
+### Description
+
+Authenticate a driver using email and password.
+
+### Request Body
+
+The request body should be in JSON format and include the following fields:
+
+- **email** (string, required): Valid email address of the driver.
+- **password** (string, required): Password for the account (minimum 6 characters).
+
+#### Example
+
+```json
+{
+  "email": "jane.doe@example.com",
+  "password": "strongPassword123"
+}
+```
+
+### Responses
+
+#### Success
+
+- **Status Code**: 200 OK
+- **Body**:
+
+  ```json
+  {
+    "token": "jwt_token_here",
+    "driver": {
+      "_id": "driver_id_here",
+      "fullname": {
+        "firstname": "Jane",
+        "lastname": "Doe"
+      },
+      "email": "jane.doe@example.com",
+      "vehicle": {
+        "color": "Red",
+        "plate": "AB123CD",
+        "capacity": 4,
+        "vehicleType": "car"
+      }
+      // ...other driver fields...
+    }
+  }
+  ```
+
+#### Errors
+
+- **400 Bad Request**: Validation errors or missing required fields.
+
+  ```json
+  {
+    "error": [
+      {
+        "msg": "Invalid Email",
+        "param": "email",
+        "location": "body"
+      },
+      {
+        "msg": "Password must be at least 6 characters",
+        "param": "password",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **401 Unauthorized**: Invalid email or password.
+
+  ```json
+  {
+    "message": "Invalid email or password"
+  }
+  ```
+
+- **500 Internal Server Error**: An error occurred on the server.
+
+### Notes
+
+- Ensure that all required fields are provided and meet validation criteria.
+- The response includes a JWT token for authentication purposes.
+- Set the `Content-Type` header to `application/json` when making requests.
+
+## GET /drivers/profile
+
+### Description
+
+Retrieve the authenticated driver's profile information.
+
+### Headers
+
+- **Authorization** (string, required): Bearer token obtained after login.
+
+### Responses
+
+#### Success
+
+- **Status Code**: 200 OK
+- **Body**:
+
+  ```json
+  {
+    "_id": "driver_id_here",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "AB123CD",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+    // ...other driver fields...
+  }
+  ```
+
+#### Errors
+
+- **401 Unauthorized**: Token is missing or invalid.
+
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+- **500 Internal Server Error**: An error occurred on the server.
+
+### Notes
+
+- Authentication is required for this endpoint.
+- Include the JWT token in the `Authorization` header as `Bearer <token>`.
+
+## GET /drivers/logout
+
+### Description
+
+Logout the authenticated driver by invalidating their JWT token.
+
+### Headers
+
+- **Authorization** (string, required): Bearer token obtained after login.
+
+### Responses
+
+#### Success
+
+- **Status Code**: 200 OK
+- **Body**:
+
+  ```json
+  {
+    "message": "Logged out successfully"
+  }
+  ```
+
+#### Errors
+
+- **401 Unauthorized**: Token is missing or invalid.
+
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+- **500 Internal Server Error**: An error occurred on the server.
+
+### Notes
+
+- This endpoint invalidates the driver's current JWT token.
+- Include the JWT token in the `Authorization` header as `Bearer <token>`.
