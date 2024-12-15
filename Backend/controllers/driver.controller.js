@@ -7,13 +7,14 @@ module.exports.registerDriver = async (req, res,next) => {
     if(!error.isEmpty()){
         return res.status(400).json({error: error.array()});
     }
-
+    // console.log(req.body);
     const {fullname, email, password, vehicle} = req.body;
     //checking that driver is already present or not
     const isDriverAlreadyExist= await driverModel.findOne({email});
     if(isDriverAlreadyExist){
         return res.status(400).json({message: 'Driver already exist'});
     }
+    // console.log(req.body);
 
     const hashPassword = await driverModel.hashPassword(password);
     const driver = await driverService.createDriver({
